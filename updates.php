@@ -1,7 +1,6 @@
 <?php
     require_once 'includes/rdio.php';
     
-    
     $reqtype = htmlspecialchars($_GET["type"]);
     
     if($reqtype === "rdio"){
@@ -29,7 +28,30 @@
         $resultsArray = array( songName => $lastName, albumName => $lastAlbum, albumCover => $lastAlbumCover, artist => $lastArtist, artistUrl => $artistUrl, albumUrl => $albumUrl);
         echo json_encode($resultsArray);
     }else if($reqtype === "goodreads"){
-        echo "goodreads";
+        /**
+         * Gets information about the book currently being read on goodreads
+         * Only works if one book is being read, at the moment.
+         **/
+        $api = "API";
+        $usr = "USRID";
+        $resultsArray = array();
+        
+        //get currently reading books
+        $current_books = "http://www.goodreads.com/review/list/".$usr.".xml?key=".$api."&v=2&shelf=currently-reading&sort=date_read&order=d&page=1&per_page=1";
+        $reading = simplexml_load_file($current_books);
+        
+        //get read status
+        $current_status = "http://www.goodreads.com/user/show/".$usr.".xml?key=".$api;
+        $status = simplexml_load_file($current_status);
+        $resultsArray['completionStatus'] = (string)($status->user->user_statuses->user_status->percent);
+        $resultsArray['bookTitle'] = (string)($reading->reviews->review[0]->book->title);
+        $resultsArray['bookCover'] = (string)($reading->reviews->review[0]->book->image_url);
+        foreach($reading->reviews->review[0]->book->authors->author as $author){
+            $resultsArray['author'] = (string)($author->name);
+        }
+        
+        echo json_encode($resultsArray);
+   
     }else if($reqtype === "twitter"){
         echo "twitter";
     }else if($reqtype === "github"){
