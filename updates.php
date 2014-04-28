@@ -1,6 +1,8 @@
 <?php
     require_once 'includes/rdio.php';
-    
+    require_once 'includes/tmhOAuth.php';
+    ini_set('error_reporting', E_ALL);
+
     $reqtype = htmlspecialchars($_GET["type"]);
     
     if($reqtype === "rdio"){
@@ -53,9 +55,32 @@
         echo json_encode($resultsArray);
    
     }else if($reqtype === "twitter"){
-        echo "twitter";
+        /**
+         * Current twitter API guidelines make this a PITA and would violate twitter's UX guidelines
+         *
+         * For now, no tweets.
+         *
+         ***/
     }else if($reqtype === "github"){
-        echo "github";
+        /**
+         *This is easily done with javascript and jquery, as follows an example:
+         *
+         *function githubUpdate(){
+                $.ajax({
+                    type: "GET",
+                    url: "https://api.github.com/repositories/19235975/commits"
+                })
+                .done(function( msg ) {
+                    console.log(msg[0]['commit']);
+                    var content = "";
+                    var date = new Date(msg[0]['commit']['author']['date']);
+                    content += "Latest Commit: " + msg[0]['commit']['message'] +" - " + date.toLocaleDateString() + " " + date.toLocaleTimeString(); 
+                    $('.update').html(content);
+                });
+            };
+         *
+         * as such, this isn't required in the server side script
+         **/
     }
 
 
