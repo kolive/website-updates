@@ -1,7 +1,5 @@
 <?php
     require_once 'includes/rdio.php';
-    require_once 'includes/tmhOAuth.php';
-    ini_set('error_reporting', E_ALL);
 
     $reqtype = htmlspecialchars($_GET["type"]);
     
@@ -12,7 +10,7 @@
                         'vanityName' => 'alunatic',
                         'extras' => 'lastSongPlayed,lastSongPlayTime'
                 );
-        $rdio = new Rdio(array("RDIOKEY", "RDIOKEY"));
+        $rdio = new Rdio(array("api", "api"));
         $result = $rdio->call("findUser", $fields);
         $result = get_object_vars($result->result->lastSongPlayed);
         
@@ -34,8 +32,8 @@
          * Gets information about the book currently being read on goodreads
          * Only works if one book is being read, at the moment.
          **/
-        $api = "API";
-        $usr = "USRID";
+        $api = "api";
+        $usr = "api";
         $resultsArray = array();
         
         //get currently reading books
