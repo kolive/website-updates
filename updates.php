@@ -4,7 +4,8 @@
     
     $reqtype = htmlspecialchars($_GET["type"]);
     
-    if($reqtype === "rdio"){        		
+    if($reqtype === "rdio"){
+        //returns information about the last song listened to on rdio
         $url = 'http://api.rdio.com/1/';
         $fields = array(
                         'vanityName' => 'alunatic',
